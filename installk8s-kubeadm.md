@@ -106,9 +106,6 @@ source ~/.bashrc
 sudo systemctl enable --now kubelet
 sudo systemctl enable containerd
 sudo systemctl enable --now docker
-sudo systemctl start docker
-sudo systemctl start kubelet
-sudo systemctl start containerd
 ```
 
 ## Iniciar los Servicios
