@@ -167,10 +167,10 @@ sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
 rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 ```
 ```bash
-cilium install
+/usr/local/bin/cilium install
 ```
 ```bash
-cilium status
+/usr/local/bin/cilium status
 ```
 ```bash
 kubectl get nodes
