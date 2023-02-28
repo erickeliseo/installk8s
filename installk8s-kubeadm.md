@@ -242,7 +242,21 @@ helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ing
 kubectl get pods -A
 ```
 
-## Create a deployment named my-dep that runs the nginx image with 3 replicas
+## Crear un deployment de aplicación, reemplazar el valor --rule="nginx.35-185-61-217.nip.io/=nginx:80" según corresponda.
 ```bash
-kubectl create deployment demo-dep-k8s --image=nginx --replicas=3
+kubectl create ns example-deployment
+kubectl get ns example-deployment -o yaml
+kubectl config set-context --current --namespace=example-deployment
+mkdir files-yamls ; cd files-yamls
+kubectl create deployment nginx --image=quay.io/equinoneznunus/opensuse-nginx -o yaml --dry-run=client > my-deployment.yaml
+kubectl apply -f my-deployment.yaml
+kubectl get deployments
+kubectl expose deployment nginx --port=80 --target-port=80 -o yaml --dry-run=client > my-svc.yaml
+kubectl apply -f my-svc.yaml
+kubectl get svc
+kubectl create ingress nginx --rule="nginx.35-185-61-217.nip.io/=nginx:80"  --class='nginx' -o yaml --dry-run=client > my-ingress.yaml
+kubectl apply -f my-ingress.yaml
+kubectl get ingress
 ```
+
+## Probar la URL desde el Navegador Web
