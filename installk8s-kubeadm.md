@@ -218,6 +218,9 @@ chmod +x  ~/bin/helm
 kubectl create ns ingress-nginx
 helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx
 ```
+```bash
+kubectl get pods -A
+```
 
 ## Create a deployment named my-dep that runs the nginx image with 3 replicas
 ```bash
