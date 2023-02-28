@@ -13,30 +13,40 @@ La kubeadmherramienta es buena si necesitas:
 chmod 0600 student-0-private_key.pem
 ```
 
-# Establecer Conexión por medio de SSH con el servidor student-0-master
+## Establecer Conexión por medio de SSH con el servidor student-0-master, ejecute el siguiente comando desde el servidor student-0-aio con el usuario student
+```bash
 ssh student@student-0-master -i student-0-private_key.pem
+```
 
-
-# Forwarding IPv4 and letting iptables see bridged traffic
+## Forwarding IPv4 and letting iptables see bridged traffic
+```bash
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
+```
 
+```bash
 sudo modprobe overlay
 sudo modprobe br_netfilter
+```
 
-# sysctl params required by setup, params persist across reboots
+## sysctl params required by setup, params persist across reboots
+```bash
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
+```
 
-# Apply sysctl params without reboot
+## Apply sysctl params without reboot
+```bash
 sudo sysctl --system
+```
 
-# Eliminar posibles instalaciones anteriores de Docker CE.
+## Eliminar posibles instalaciones anteriores de Docker CE.
+```bash
 sudo yum remove docker \
                   docker-client \
                   docker-client-latest \
@@ -45,8 +55,10 @@ sudo yum remove docker \
                   docker-latest-logrotate \
                   docker-logrotate \
                   docker-engine
+```
 
-# Crear el repositorio para paqueteria de Kubernetes
+## Crear el repositorio para paqueteria de Kubernetes
+```bash
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -56,42 +68,55 @@ gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 exclude=kubelet kubeadm kubectl
 EOF
+```
 
-# Set SELinux in permissive mode (effectively disabling it)
+## Set SELinux in permissive mode (effectively disabling it)
+```bash
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+```
 
-# Detener firewalld
+## Detener firewalld
+```bash
 sudo systemctl stop firewalld
+```
 
-# Instalación de paquetería necesaria
+## Instalación de paquetería necesaria
+```bash
 sudo yum makecache --refresh
 sudo yum -y install iproute-tc
 sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+```
 
-# Configuración de bash auto-completion
+## Configuración de bash auto-completion
+```bash
 sudo yum install bash-completion -y
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 source ~/.bashrc
+```
 
-# Habilitación de Servicios
+## Habilitación de Servicios
+```bash
 sudo systemctl enable --now kubelet
 sudo systemctl enable containerd
 sudo systemctl enable --now docker
 sudo systemctl start docker
 sudo systemctl start kubelet
 sudo systemctl start containerd
+```
 
-#You need CRI support enabled to use containerd with Kubernetes. Make sure that cri is not included in thedisabled_plugins list within /etc/containerd/config.toml; if you made changes to that file, also restart containerd.
-
+## You need CRI support enabled to use containerd with Kubernetes. Make sure that cri is not included in thedisabled_plugins list within /etc/containerd/config.toml; if you made changes to that file, also restart containerd.
+```bash
 sudo vi /etc/containerd/config.toml
 #disabled_plugins = ["cri"]
-
-# Reiniciar servicio containerd
+```
+## Reiniciar servicio containerd
+```bash
 sudo systemctl restart containerd
+```
 
-# Ejecutar todos los pasos anteriores para el servidor student-0-worker
+## Ejecutar todos los pasos anteriores para el servidor student-0-worker
 
 # Creación de nuevo Cluster, cambiar la variable IPADDR por la IP de su servidor Master
 export IPADDR="10.138.0.33"
