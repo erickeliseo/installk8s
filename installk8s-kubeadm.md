@@ -117,6 +117,7 @@ sudo systemctl start containerd
 
 ## You need CRI support enabled to use containerd with Kubernetes. Make sure that cri is not included in thedisabled_plugins list within /etc/containerd/config.toml; if you made changes to that file, also restart containerd.
 ```bash
+sudo cp -p /etc/containerd/config.toml /etc/containerd/config.toml_respaldo
 sudo vi /etc/containerd/config.toml
 #disabled_plugins = ["cri"]
 ```
