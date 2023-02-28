@@ -1,9 +1,7 @@
-
-
-
-
 # Copiar la llave en formato PEM proporcionada hacia el servidor student-0-aio y colocarle los permisos adecuados
+```bash
 chmod 0600 student-0-private_key.pem
+```
 
 # Establecer Conexión por medio de SSH con el servidor student-0-master
 ssh student@student-0-master -i student-0-private_key.pem
