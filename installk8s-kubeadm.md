@@ -260,3 +260,4 @@ kubectl get ingress
 ```
 
 ## Probar la URL desde el Navegador Web
+http://nginx.35-185-61-217.nip.io/
