@@ -1,3 +1,13 @@
+# Creación de un clúster de Kubernetes con kubeadm
+Con kubeadm, puede crear un clúster de Kubernetes mínimo que se ajuste a las prácticas recomendadas. De hecho, puede usar kubeadm para configurar un clúster que pasará las pruebas de conformidad de Kubernetes . kubeadm también es compatible con otras funciones del ciclo de vida del clúster, como tokens de arranque y actualizaciones del clúster.
+
+La kubeadmherramienta es buena si necesitas:
+
+* Una forma sencilla de probar Kubernetes, posiblemente por primera vez.
+* Una forma para que los usuarios existentes automaticen la configuración de un clúster y prueben su aplicación.
+* Un bloque de construcción en otro ecosistema y/o herramientas de instalación con un alcance mayor.
+* Puede instalarlo y usarlo kubeadmen varias máquinas: su computadora portátil, un conjunto de servidores en la nube, una Raspberry Pi y más. Ya sea que esté implementando en la nube o en las instalaciones OnPremise, puede integrarse kubeadmen sistemas de aprovisionamiento como Ansible o Terraform.
+
 ## Copiar la llave en formato PEM proporcionada hacia el servidor student-0-aio y colocarle los permisos adecuados
 ```bash
 chmod 0600 student-0-private_key.pem
