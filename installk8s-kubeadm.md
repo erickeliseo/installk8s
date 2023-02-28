@@ -1,4 +1,4 @@
-# Copiar la llave en formato PEM proporcionada hacia el servidor student-0-aio y colocarle los permisos adecuados
+## Copiar la llave en formato PEM proporcionada hacia el servidor student-0-aio y colocarle los permisos adecuados
 ```bash
 chmod 0600 student-0-private_key.pem
 ```
