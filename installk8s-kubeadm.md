@@ -184,11 +184,16 @@ ssh student@student-0-worker -i student-0-private_key.pem
 
 ## Ejecutar el siguiente comando para incorporar el nuevo servidor, reemplazar esta línea con los valores obtenidos anteriormente
 ```bash
+sudo -i
 kubeadm join 10.138.0.33:6443 --token 0ulgah.lm5q88vwg398bk2r --discovery-token-ca-cert-hash sha256:0a3704551e4819102ee481f21a1a5c46f32eafdca8228986038dba85f4f70165
+exit
+exit
 ```
 
 ## Regresar al servidor Master y verificar el nuevo Nodo con los siguientes comandos:
 ```bash
+ssh student@student-0-master -i student-0-private_key.pem
+sudo -i
 kubectl get nodes
 kubectl get pods -A
 ```
