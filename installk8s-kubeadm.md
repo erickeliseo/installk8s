@@ -57,6 +57,11 @@ sudo yum remove docker \
                   docker-engine
 ```
 
+## Agregar al sistema operativo el repositorio de Docker CE
+```bash
+sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+```
+
 ## Crear el repositorio para paqueteria de Kubernetes
 ```bash
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
