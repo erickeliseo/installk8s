@@ -213,10 +213,30 @@ mv linux-amd64/helm  ~/bin/helm
 chmod +x  ~/bin/helm
 ```
 
+## Crear un archivo de valores para la Instalación de Ingress Controller
+```bash
+vi values.yaml
+```
+```yaml
+controller:
+  hostNetwork: true
+  kind: DaemonSet
+  ingressClass: nginx
+  ingressClassResource:
+    # -- Name of the ingressClass
+    name: nginx
+    # -- Is this ingressClass enabled or not
+    enabled: true
+    # -- Is this the default ingressClass for the cluster
+    default: true
+  service:
+    type: ClusterIP
+```
+
 ## Instalación de Ingress Controller
 ```bash
 kubectl create ns ingress-nginx
-helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx
+helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --values values.yaml
 ```
 ```bash
 kubectl get pods -A
