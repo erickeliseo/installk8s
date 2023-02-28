@@ -111,11 +111,19 @@ sudo systemctl start kubelet
 sudo systemctl start containerd
 ```
 
+## Iniciar los Servicios
+```bash
+sudo systemctl start docker
+sudo systemctl start kubelet
+sudo systemctl start containerd
+```
+
 ## You need CRI support enabled to use containerd with Kubernetes. Make sure that cri is not included in thedisabled_plugins list within /etc/containerd/config.toml; if you made changes to that file, also restart containerd.
 ```bash
 sudo vi /etc/containerd/config.toml
 #disabled_plugins = ["cri"]
 ```
+
 ## Reiniciar servicio containerd
 ```bash
 sudo systemctl restart containerd
@@ -123,23 +131,34 @@ sudo systemctl restart containerd
 
 ## Ejecutar todos los pasos anteriores para el servidor student-0-worker
 
-# Creación de nuevo Cluster, cambiar la variable IPADDR por la IP de su servidor Master
+## Identifique la IP del servidor student-0-master, ejecutando el siguiente comando
+```bash
+sudo ip a
+```
+
+## Creación de nuevo Cluster, cambiar la variable IPADDR por la IP de su servidor Master, reemplace la variable IPADDR, por la IP identificada anteriormente
+```bash
 export IPADDR="10.138.0.33"
 export NODENAME=$(hostname -s)
 export POD_CIDR="192.168.0.0/16"
 sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=$POD_CIDR --node-name $NODENAME --ignore-preflight-errors Swap
+```
 
-# Guardar la línea que comienza con: kubeadm join .....
+## Guardar en un archivo de texto toda la salida de la ejecución anterior, ya que será utilizada mas adelante
 
 # Ejecutar los siguientes comandos como root.
+```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-  
+```
+```bash
 kubectl get nodes
 kubectl get pods -A
+```
 
-# Instalación de CNI Cilium
+## Instalación de CNI Cilium como solución CNI
+```bash
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/master/stable.txt)
 CLI_ARCH=amd64
 if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
@@ -147,37 +166,56 @@ curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/d
 sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
 sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
 rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
-
+```
+```bash
 cilium install
-
+```
+```bash
 cilium status
-
-
-# Agregar nuevo nodo: Conectarse por SSH y ejecutar el siguiente comando:
-ssh student@student-0-worker -i student-0-private_key.pem
-
-# Ejecutar el siguiente comando para incorporar el nuevo servidor
-kubeadm join 10.138.0.33:6443 --token 0ulgah.lm5q88vwg398bk2r --discovery-token-ca-cert-hash sha256:0a3704551e4819102ee481f21a1a5c46f32eafdca8228986038dba85f4f70165
-
-# Regresar al servidor Master y verificar el nuevo Nodo con los siguientes comandos:
+```
+```bash
 kubectl get nodes
 kubectl get pods -A
+```
 
-# Aagregar la etiqueta de Worker al nuevo servidor
+## Agregar nuevo nodo al cluster de Kubernetes: Conectarse por SSH y ejecutar el siguiente comando:
+```bash
+ssh student@student-0-worker -i student-0-private_key.pem
+```
+
+## Ejecutar el siguiente comando para incorporar el nuevo servidor, reemplazar esta línea con los valores obtenidos anteriormente
+```bash
+kubeadm join 10.138.0.33:6443 --token 0ulgah.lm5q88vwg398bk2r --discovery-token-ca-cert-hash sha256:0a3704551e4819102ee481f21a1a5c46f32eafdca8228986038dba85f4f70165
+```
+
+## Regresar al servidor Master y verificar el nuevo Nodo con los siguientes comandos:
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
+
+## Aagregar la etiqueta de Worker al nuevo servidor
+```bash
 kubectl label node student-0-worker node-role.kubernetes.io/worker=worker
+```
 
-# Instalación de la utilidad HELM
+## Instalación de la utilidad HELM
+```bash
 mkdir ~/bin
 cd ~/
 wget https://get.helm.sh/helm-v3.3.1-linux-amd64.tar.gz
 tar -xf helm-v3.3.1-linux-amd64.tar.gz
 mv linux-amd64/helm  ~/bin/helm
 chmod +x  ~/bin/helm
+```
 
-# Instalación de Ingress Controller
+## Instalación de Ingress Controller
+```bash
 kubectl create ns ingress-nginx
 helm install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx
+```
 
-# Create a deployment named my-dep that runs the nginx image with 3 replicas
+## Create a deployment named my-dep that runs the nginx image with 3 replicas
+```bash
 kubectl create deployment demo-dep-k8s --image=nginx --replicas=3
-
+```
