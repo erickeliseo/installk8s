@@ -129,7 +129,7 @@ sudo systemctl restart containerd
 
 ## Ejecutar todos los pasos anteriores para el servidor student-0-worker
 
-## Identifique la IP del servidor student-0-master, ejecutando el siguiente comando
+## Identifique la IP del servidor student-0-master, ejecutando el siguiente comando en el servidor student-0-master
 ```bash
 sudo ip a
 ```
