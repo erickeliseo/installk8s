@@ -146,6 +146,7 @@ sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-
 
 # Ejecutar los siguientes comandos como root.
 ```bash
+sudo -i
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
